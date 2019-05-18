@@ -28,14 +28,14 @@ class MyLabelPowerSetFeatureSelect():
         self.X_new = SelectKBest(chi2, k=2)
         
         # the feature selecting
-        X_transformed = self.X_new.fit_transform(X, y_transformed)
+        self.X_transformed = self.X_new.fit_transform(X, y_transformed)
         
         # save indices of the saved attributes
         self.selected_attributes_indices = self.X_new.get_support(indices = True)
         
         #print(self.attributes_indices,'the indices of the selected atributes')
         
-        return X_transformed
+        return self
         
     
     def transform(self, X):    
