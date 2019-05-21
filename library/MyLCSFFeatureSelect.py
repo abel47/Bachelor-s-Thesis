@@ -41,10 +41,12 @@ class lcsf_feature_selection():
 		return y_prim
 	
 	def CS(self, q, y):
+		dictionary = dict() #or tuple or matrix
+		k = 0
 		for i in range(0,len(y)):
 			for j in range(0,len(y)):
 				if i!=j and y[i]==y[j] and y[j] == 1:
-					#k = k + 1
+					dictionary[k]
 					pass
 					
 		
