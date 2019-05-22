@@ -4,7 +4,7 @@ Created on Mon May 20 17:47:09 2019
 
 @author: Abel
 """
-from sklearn.base import TransformerMixin
+#from sklearn.base import TransformerMixin
 
 import random
 
@@ -14,8 +14,8 @@ import random
 
 class lcsf_feature_selection():
 	def __init__():
-		if q is None: #have to fix things in here
-			q = 2
+#		if q is None: #have to fix things in here
+#			q = 2
 		self.q = q
 		self.selecting_strategy = selecting_strategy
 		self.combining_strategy = combining_strategy
@@ -57,10 +57,26 @@ class lcsf_feature_selection():
 	
 	def LS(self, q, y):
 		# nr ex agree (1,1) AND (0,0)
-		# c_e
-		
-		#nr ex disagree (0,1) OR (1,0)
-		#c_d
+		# c_e]
+		Y = y
+		mydict = dict()
+
+		for y in Y:
+		    c_e = 0
+		    c_d = 0
+		    for i in range(1,len(Y)+1):
+		        #print(len(y))
+		        mydict.update({(i,):None})
+		#         c_e = 0
+		#         c_d = 0
+		        for j in range(i,len(Y)+1):
+		            #mydict.update({(i,j):0})
+		            if i!=j and y[i]==y[j]:
+		                c_e = c_e + 1
+		                mydict.update({(i,j):(c_e,c_d)})
+		            if i!=j and y[i]!=y[j]:
+		                c_d = c_d + 1
+		                mydict.update({(i,j):(c_e, c_d)})
 		
 		#twolists sorted according to 1.c_e 2.c_d
 		
