@@ -5,14 +5,10 @@ Created on Mon May 20 17:47:09 2019
 @author: Abel
 """
 #from sklearn.base import TransformerMixin
+from library.MyBinaryRelevanceFeatureSelect import MyBinaryRelevanceFeatureSelect
 
 import random
 import operator
-
-
-#from skmultilearn.base.problem_transformation import ProblemTransformationBase
-#import numpy as np
-#from scipy import sparse
 
 class lcsf_feature_selection():
 #    def __init__():
@@ -21,54 +17,71 @@ class lcsf_feature_selection():
         #self.q = q
         #self.selecting_strategy = selecting_strategy
         #self.combining_strategy = combining_strategy
-#    def fit(self, X, y):
-#        
-#        #self.lcsf_object =  
-#        
-##        X_new = self.selecting_strategy.fit_transform(X, y)
-##        X_new.shape
-#        
-#        
-#        return self
+    def fit(self, X, y):
+        
+        self.object = MyBinaryRelevanceFeatureSelect() 
+        
+        self.object.fit(X,y)
+#        X_new = self.selecting_strategy.fit_transform(X, y)
+#        X_new.shape
+        return self
     
     def RS(self, q, y):
-        #rand select two diff numbers in range 0 - length of y
-        #return the labels
-        labels_selected = random.sample(range(0, len(y)), 2)
+        #rand select q diff numbers in range 0 - length of y
+        #return the indices of the labels
+        labels_selected = random.sample(range(0, len(y[0])), q*2)
+        list_tuple_of_indices = list(zip(*[iter(labels_selected)]*2))
         
-        y_prim = []
-        y_prim.append(labels_selected[0])
-        y_prim.append(labels_selected[1])        
+        return list_tuple_of_indices
+           
         
-        return y_prim
+        
     
     def CS(self, q, y):
-#        dictionary = dict() #or tuple or matrix
-#        k = 0
-#        for i in range(0,len(y)):
-#            for j in range(0,len(y)):
-#                if i!=j and y[i]==y[j] and y[j] == 1:
-#                    dictionary[k]
-#                    pass
+        
         c_c = [] 
-
+        list_of_tuple_indices = []
+        
         cc = 0
+        #dictionary_cc = dict(zip(indices, c_e))
         
         for i in range(0, y.shape[0]):
             #cc=0
             for j in range(i+1, y.shape[0]):
+                #print(i,j)
                 if j!=i:
+                    list_of_tuple_indices.append((i+1,j+1))
                     cc=0
                     for k in range(0, y.shape[1]):
                         if y[i][k]==y[j][k] and y[i][k] == 1:
                             cc = cc + 1
                     c_c.append(cc)    
-                    print(cc)
+                    #print(cc)
+        #print(c_c)
+        #print(list_of_tuple_indices)
+        dictionary_cc = dict(zip(list_of_tuple_indices, c_c))
+        sorted_cc = sorted(dictionary_cc.items(), key=operator.itemgetter(1), reverse = True)
+        #print(sorted_cc)
+        list_tuple_of_indices = []
         
+        for i in sorted_cc:
+            for j in sorted_cc:
+                if i[0][0]!=j[0][0] and i[0][1]!=j[0][0] and i[0][0]!=j[0][1] and i[0][1]!=j[0][1]:
+                    #print(i[0],j[0])
+                    if len(list_tuple_of_indices) == q:
+                        break
+                    list_tuple_of_indices.append(i[0])
+                    #print(i[0],j[0],'###')
+                    list_tuple_of_indices.append(j[0])
+                    #rint(len(list_tuple_of_indices),'length')
+                
+                    if len(list_tuple_of_indices) == q:
+                        break
+                
         #nb of labels within a pair (1,1)
         #select the first q
         #return the labels
-        pass
+        return list_tuple_of_indices
     
     def LS(self, q, y):
         # nr ex agree (1,1) AND (0,0)
@@ -126,37 +139,52 @@ class lcsf_feature_selection():
         
         return indices_of_selected_features
     
-    def generation(self, Y):
+    def generation(self,label_indices_tuples, y):
         #AND  y[i][j] = 1 iff y[i]=y[j]=1 else y[i][j]=0
         #XOR  y[i][j] = 1 iff y[i]!=y[j]  else y[i][j]=0
         #XNOR y[i][j] = 1 iff y[i]=y[j]   else y[i][j]=0
-        new_label_AND = []
-        new_label_XOR = []
-        new_label_XNOR = []
-        for i in range(0,len(Y[0])):
-            #print(i,'#')
-            #AND
-            if label1[i] == label2[i] and label1[i]==1:
-                new_label_AND.append(1)
-            else:
-                new_label_AND.append(0) 
-            #XOR
-            if label1[i] != label2[i]:
-                new_label_XOR.append(1)
-            else:
-                new_label_XOR.append(0)
-            #XNOR
-            if label1[i] == label2[i]:
-                new_label_XNOR.append(1)
-            else:
-                new_label_XNOR.append(0)
-        print(new_label_AND)
-        print(new_label_XOR)
-        print(new_label_XNOR)
-        pass
+        AND_labels = []
+        XOR_labels = []
+        XNOR_labels = []
+        
+        for label in range(0,len(label_indices_tuples)):
+        
+            label1 = y[label_indices_tuples[label][0]]
+            label2 = y[label_indices_tuples[label][1]]
+            
+            #print(label1,'###')
+            #print(label2,'###')
+            
+            new_label_AND = []
+            new_label_XOR = []
+            new_label_XNOR = []
+            for i in range(0,len(y[0])):
+                #print(i,'#')
+                #AND
+                if label1[i] == label2[i] and label1[i]==1:
+                    new_label_AND.append(1)
+                else:
+                    new_label_AND.append(0) 
+                #XOR
+                if label1[i] != label2[i]:
+                    new_label_XOR.append(1)
+                else:
+                    new_label_XOR.append(0)
+                #XNOR
+                if label1[i] == label2[i]:
+                    new_label_XNOR.append(1)
+                else:
+                    new_label_XNOR.append(0)
+            #print(new_label_AND)
+            AND_labels.append(new_label_AND)
+            #print(new_label_XOR)
+            XOR_labels.append(new_label_XOR)
+            #print(new_label_XNOR)
+            XNOR_labels.append(new_label_XNOR)
+        return AND_labels,XOR_labels,XNOR_labels
 #def doSomething(self, a=None):
 #    if a is None:
 #        a = self.z
 #    self.z = 3
 #    self.b = a
-    
+ 
