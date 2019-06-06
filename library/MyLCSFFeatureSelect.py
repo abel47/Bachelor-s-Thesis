@@ -50,7 +50,7 @@ class lcsf_feature_selection():
             for j in range(i+1, y.shape[0]):
                 #print(i,j)
                 if j!=i:
-                    list_of_tuple_indices.append((i+1,j+1))
+                    list_of_tuple_indices.append((i,j))
                     cc=0
                     for k in range(0, y.shape[1]):
                         if y[i][k]==y[j][k] and y[i][k] == 1:
@@ -132,14 +132,15 @@ class lcsf_feature_selection():
                 if a[0][0]!=b[0][0] and a[0][0]!=b[0][1]and a[0][1]!=b[0][0]and a[0][1]!=b[0][1]:
                     #print(a[0],b[0])#,a[0],a[1],b[0],b[1])
                     print(a[0],b[0],'###')
+                    print(a[1],b[1],'###')
                     if a[1]>b[1]:
                         indices_of_selected_features.append(a[0])
                         indices_of_selected_features.append(b[0])
-                        k = k+2
+                        k = k + 2
                         #a = next(sorted_cd)
                     if b[1]>a[1]:
                         indices_of_selected_features.append(b[0])
-                        k = k+2
+                        k = k + 2
                         #b = next(sorted_ce)
             if k == umbral:
                 break
@@ -150,9 +151,9 @@ class lcsf_feature_selection():
         #AND  y[i][j] = 1 iff y[i]=y[j]=1 else y[i][j]=0
         #XOR  y[i][j] = 1 iff y[i]!=y[j]  else y[i][j]=0
         #XNOR y[i][j] = 1 iff y[i]=y[j]   else y[i][j]=0
-        AND_labels = []
-        XOR_labels = []
-        XNOR_labels = []
+        self.AND_labels = []
+        self.XOR_labels = []
+        self.XNOR_labels = []
         
         for label in range(0,len(label_indices_tuples)):
         
@@ -183,15 +184,9 @@ class lcsf_feature_selection():
                 else:
                     new_label_XNOR.append(0)
             #print(new_label_AND)
-            AND_labels.append(new_label_AND)
+            self.AND_labels.append(new_label_AND)
             #print(new_label_XOR)
-            XOR_labels.append(new_label_XOR)
+            self.XOR_labels.append(new_label_XOR)
             #print(new_label_XNOR)
-            XNOR_labels.append(new_label_XNOR)
-        return AND_labels,XOR_labels,XNOR_labels
-#def doSomething(self, a=None):
-#    if a is None:
-#        a = self.z
-#    self.z = 3
-#    self.b = a
- 
+            self.XNOR_labels.append(new_label_XNOR)
+        return self.AND_labels, self.XOR_labels, self.XNOR_labels
