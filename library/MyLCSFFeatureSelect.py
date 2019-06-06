@@ -100,7 +100,7 @@ class lcsf_feature_selection():
                 if j!=i:
                     ce = 0
                     cd = 0
-                    indices.append([i+1,j+1])
+                    indices.append((i,j))
                     for k in range(0, y.shape[1]):
                         if y[i][k]==y[j][k] and y[i][k] == 1:
                             ce = ce + 1
@@ -111,14 +111,17 @@ class lcsf_feature_selection():
                     c_e.append(ce)  
                     c_d.append(cd)
                     #print(ce)
-#        print(c_e)
-#        print(c_d)
-#        print(indices)
+        print(c_e)
+        print(c_d)
+        print(type(indices))
         dictionary_ce = dict(zip(indices, c_e))
         dictionary_cd = dict(zip(indices, c_d))
         
         sorted_ce = sorted(dictionary_ce.items(), key=operator.itemgetter(1), reverse = True)
         sorted_cd = sorted(dictionary_cd.items(), key=operator.itemgetter(1), reverse = True)
+        
+        print(sorted_ce,'====')
+        print(sorted_cd,'====')
 
         indices_of_selected_features = []
         
@@ -128,12 +131,16 @@ class lcsf_feature_selection():
             for b in sorted_ce:
                 if a[0][0]!=b[0][0] and a[0][0]!=b[0][1]and a[0][1]!=b[0][0]and a[0][1]!=b[0][1]:
                     #print(a[0],b[0])#,a[0],a[1],b[0],b[1])
+                    print(a[0],b[0],'###')
                     if a[1]>b[1]:
                         indices_of_selected_features.append(a[0])
-                        k = k+1
-                    else:
                         indices_of_selected_features.append(b[0])
-                        k = k+1
+                        k = k+2
+                        #a = next(sorted_cd)
+                    if b[1]>a[1]:
+                        indices_of_selected_features.append(b[0])
+                        k = k+2
+                        #b = next(sorted_ce)
             if k == umbral:
                 break
         
