@@ -144,6 +144,29 @@ class lcsf_feature_selection():
                         #b = next(sorted_ce)
             if k == umbral:
                 break
+        #]]]]]]]]]]]]]
+        for i in range(0,len(a)):
+               for  j in range(i+1,len(b)):
+                    print(i,j,'#####')
+                    if a[i][0][0]!=b[j][0][0] and a[i][0][0]!=b[j][0][1]and a[i][0][1]!=b[j][0][0]and a[i][0][1]!=b[j][0][1]:
+                        #print(a[i][0],a[i][1],'    ',b[i][0],b[i][1],'normal')
+                        #print(a[i],'=====',b[i],'normal')
+                        print(a[0],b[0])
+            #             if a[i][1] >= b[j][1]:
+            #                 ce = True
+            #                 print(a[i][0],a[i][1],'    ',b[i][0],b[i][1],'ce')
+            #                 k = k + 1
+            #             if a[i][1] < b[j][1]:
+            #                 cd = True
+            #                 print(a[i][0],a[i][1],'====',b[i][0],b[i][1],'cd')
+            #                 k = k + 1
+            
+            #         if ce == True:
+            #             i = i + 1
+            #             ce = False
+            #         if cd == True:
+            #             j = j + 1
+            #             cd = False
         
         return indices_of_selected_features
     
