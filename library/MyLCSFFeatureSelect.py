@@ -212,10 +212,10 @@ class lcsf_feature_selection():
             self.XOR_labels.append(new_label_XOR)
             #print(new_label_XNOR)
             self.XNOR_labels.append(new_label_XNOR)
-		if method == 'AND':
-			return self.AND_labels
-		if method == 'XOR':
-			return self.XOR_labels
-		if method == 'XNOR':
-			return self.XNOR_labels
+        if method == 'AND':
+            return self.AND_labels
+        if method == 'XOR':
+            return self.XOR_labels
+        if method == 'XNOR':
+            return self.XNOR_labels
         #return self.AND_labels, self.XOR_labels, self.XNOR_labels
