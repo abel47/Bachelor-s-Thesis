@@ -170,7 +170,7 @@ class lcsf_feature_selection():
         
         return indices_of_selected_features
     
-    def generation(self,label_indices_tuples, y):
+    def generation(self,label_indices_tuples, y, method):
         #AND  y[i][j] = 1 iff y[i]=y[j]=1 else y[i][j]=0
         #XOR  y[i][j] = 1 iff y[i]!=y[j]  else y[i][j]=0
         #XNOR y[i][j] = 1 iff y[i]=y[j]   else y[i][j]=0
@@ -212,4 +212,10 @@ class lcsf_feature_selection():
             self.XOR_labels.append(new_label_XOR)
             #print(new_label_XNOR)
             self.XNOR_labels.append(new_label_XNOR)
-        return self.AND_labels, self.XOR_labels, self.XNOR_labels
+		if method == 'AND':
+			return self.AND_labels
+		if method == 'XOR':
+			return self.XOR_labels
+		if method == 'XNOR':
+			return self.XNOR_labels
+        #return self.AND_labels, self.XOR_labels, self.XNOR_labels
