@@ -9,6 +9,7 @@ from library.MyBinaryRelevanceFeatureSelect import MyBinaryRelevanceFeatureSelec
 
 import random
 import operator
+import numpy as np
 
 class lcsf_feature_selection():
 #    def __init__():
@@ -219,3 +220,13 @@ class lcsf_feature_selection():
         if method == 'XNOR':
             return self.XNOR_labels
         #return self.AND_labels, self.XOR_labels, self.XNOR_labels
+    
+    def concatenation(self, y, labels_to_concatenate):
+        y = np.concatenate((y,labels_to_concatenate))
+        return y
+       
+    def predict(self, X, y=None):
+        return self.object.predict(X)
+
+    def predict_proba(self, X):
+        return self.object.predict_proba(X)
